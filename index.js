@@ -20,11 +20,19 @@ errorsContainer.id = "errors";
 pageContainer.appendChild(errorsContainer);
 
 function renderHouseholdMember(values) {
-  let memberHTML = "";
+  const li = document.createElement('li');
+  li.className = "householdMember";
+  householdContainer.appendChild(li);
   for (var key in values) {
-    memberHTML += "<li>" + key + ": " + values[key] + "</li>";
+    li.innerHTML += key + ": " + values[key];
   }
-  householdContainer.innerHTML += memberHTML;
+  const button = document.createElement('button');
+  button.name = "removeButton";
+  button.innerText = "Remove";
+  li.appendChild(button);
+  button.addEventListener('click', function(e) {
+    householdContainer.removeChild(e.target.parentElement);
+  });
 }
 
 function renderError(validAge, hasRelationship) {
