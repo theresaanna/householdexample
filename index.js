@@ -1,31 +1,32 @@
 // To be unit tested
 function verifyAge(age) {
   age = parseInt(age, 10);
-  const ageCheck = age !== NaN && age > 0 ? true : false;
+  var ageCheck = age !== NaN && age > 0 ? true : false;
   return ageCheck;
 }
 
 // To be unit tested
 function verifyExists(attr) {
-  const attrCheck = attr === "" || attr === undefined ? false : true;
+  var attrCheck = attr === "" || attr === undefined ? false : true;
   return attrCheck;
 }
 
-const householdContainer = document.getElementsByClassName("household")[0];
-const addButton = document.getElementsByClassName("add")[0];
-const submitButton = document.querySelector("button[type=submit]");
-const pageContainer = document.getElementsByClassName("builder")[0];
-let errorsContainer = document.createElement('div');
+var householdContainer = document.getElementsByClassName("household")[0],
+    addButton = document.getElementsByClassName("add")[0],
+    submitButton = document.querySelector("button[type=submit]"),
+    pageContainer = document.getElementsByClassName("builder")[0],
+    errorsContainer = document.createElement('div');
 errorsContainer.id = "errors";
 pageContainer.appendChild(errorsContainer);
 
 function renderHouseholdMember(values) {
-  const li = document.createElement('li');
+  var li, ol, button;
+  li = document.createElement('li');
   li.className = "householdMember";
-  const button = document.createElement('button');
+  button = document.createElement('button');
   button.name = "removeButton";
   button.innerText = "Remove";
-  var ol = document.createElement("ol");
+  ol = document.createElement("ol");
   householdContainer.appendChild(li).appendChild(ol);
   for (var key in values) {
     ol.innerHTML += "<li class=\"householdMemberAttr\">" + key + ": " + values[key] + "</li>";
@@ -37,7 +38,7 @@ function renderHouseholdMember(values) {
 }
 
 function renderError(validAge, hasRelationship) {
-  const errors = [
+  var errors = [
     "Please verify that you have input a valid age and try again.<br/>",
     "Please select a relationship and try again.<br/>"
   ];
@@ -51,15 +52,16 @@ function renderError(validAge, hasRelationship) {
 
 addButton.addEventListener('click', function(e){
   e.preventDefault();
-  let formValues = {};
+  var formValues = {},
+      validateAge, checkRelationship;
 
   for (var i = 0; i < document.forms[0].length; i++) {
     if (document.forms[0][i].value && document.forms[0][i].value !== "") {
       formValues[document.forms[0][i].name] = document.forms[0][i].value;
     }
   }
-  const validateAge = verifyAge(formValues.age);
-  const checkRelationship = verifyExists(formValues.rel);
+  validateAge = verifyAge(formValues.age);
+  checkRelationship = verifyExists(formValues.rel);
   if (validateAge && checkRelationship) {
     renderHouseholdMember(formValues);
   }
@@ -70,22 +72,28 @@ addButton.addEventListener('click', function(e){
 
 submitButton.addEventListener('click', function(e){
   e.preventDefault();
-  var householdMembers = document.getElementsByClassName("householdMember");
-  var members = {};
+  var householdMembers = document.getElementsByClassName("householdMember"),
+      members = {},
+      householdMembersAttrs,
+      memberJSON,
+      attr,
+      attrName,
+      attrValue,
+      debugContainer;
   for (var i = 0; i < householdMembers.length; i++) {
-    var householdMemberAttrs = householdMembers[i].children[0].children;
-    var memberJSON;
+    householdMemberAttrs = householdMembers[i].children[0].children;
+    memberJSON;
     members[i] = {};
     for (var j = 0; j < householdMemberAttrs.length; j++) {
-      var attr = householdMemberAttrs[j].innerText;
-      var attrName = attr.substring(0, attr.indexOf(":"));
-      var attrValue = attr.substring(attr.indexOf(":")).substring(2);
+      attr = householdMemberAttrs[j].innerText;
+      attrName = attr.substring(0, attr.indexOf(":"));
+      attrValue = attr.substring(attr.indexOf(":")).substring(2);
       members[i][j] = members[i][j] || {};
       members[i][j][attrName] = attrValue;
     }
   }
   memberJSON = JSON.stringify(members);
-  var debugContainer = document.getElementsByClassName("debug")[0];
+  debugContainer = document.getElementsByClassName("debug")[0];
   debugContainer.innerHTML = memberJSON;
   debugContainer.style.display = "block";
 });
