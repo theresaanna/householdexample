@@ -11,6 +11,13 @@ function verifyExists(attr) {
   return attrCheck;
 }
 
+/*
+Notes:
+I wanted to do a true first iteration and not get too fancy. In
+hindsight, this might have been a lot cleaner if I had went ahead
+and used localStorage.
+*/
+
 var householdContainer = document.getElementsByClassName("household")[0],
     addButton = document.getElementsByClassName("add")[0],
     submitButton = document.querySelector("button[type=submit]"),
