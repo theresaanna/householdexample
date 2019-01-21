@@ -22,13 +22,14 @@ pageContainer.appendChild(errorsContainer);
 function renderHouseholdMember(values) {
   const li = document.createElement('li');
   li.className = "householdMember";
-  householdContainer.appendChild(li);
-  for (var key in values) {
-    li.innerHTML += key + ": " + values[key];
-  }
   const button = document.createElement('button');
   button.name = "removeButton";
   button.innerText = "Remove";
+  var ol = document.createElement("ol");
+  householdContainer.appendChild(li).appendChild(ol);
+  for (var key in values) {
+    ol.innerHTML += "<li class=\"householdMemberAttr\">" + key + ": " + values[key] + "</li>";
+  }
   li.appendChild(button);
   button.addEventListener('click', function(e) {
     householdContainer.removeChild(e.target.parentElement);
@@ -67,6 +68,24 @@ addButton.addEventListener('click', function(e){
   }
 });
 
-submitButton.addEventListener('submit', function(e){
-  debugger;
+submitButton.addEventListener('click', function(e){
+  e.preventDefault();
+  var householdMembers = document.getElementsByClassName("householdMember");
+  for (var i = 0; i < householdMembers.length; i++) {
+    var householdMemberAttrs = householdMembers[i].children[0].children;
+    var members = {};
+    var memberJSON;
+    members[i] = members[i] || {};
+    for (var j = 0; j < householdMemberAttrs.length; j++) {
+      var attr = householdMemberAttrs[j].innerText;
+      var attrName = attr.substring(0, attr.indexOf(":"));
+      var attrValue = attr.substring(attr.indexOf(":"));
+      members[i][j] = members[i][j] || {};
+      members[i][j][attrName] = attrValue;
+    }
+  }
+  memberJSON = JSON.stringify(members);
+  var debugContainer = document.getElementsByClassName("debug")[0];
+  debugContainer.innerHTML = memberJSON;
+  debugContainer.style.display = "block";
 });
