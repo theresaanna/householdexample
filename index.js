@@ -71,15 +71,15 @@ addButton.addEventListener('click', function(e){
 submitButton.addEventListener('click', function(e){
   e.preventDefault();
   var householdMembers = document.getElementsByClassName("householdMember");
+  var members = {};
   for (var i = 0; i < householdMembers.length; i++) {
     var householdMemberAttrs = householdMembers[i].children[0].children;
-    var members = {};
     var memberJSON;
-    members[i] = members[i] || {};
+    members[i] = {};
     for (var j = 0; j < householdMemberAttrs.length; j++) {
       var attr = householdMemberAttrs[j].innerText;
       var attrName = attr.substring(0, attr.indexOf(":"));
-      var attrValue = attr.substring(attr.indexOf(":"));
+      var attrValue = attr.substring(attr.indexOf(":")).substring(2);
       members[i][j] = members[i][j] || {};
       members[i][j][attrName] = attrValue;
     }
